@@ -1,0 +1,72 @@
+
+from abc import ABC, abstractmethod
+
+# Base class for freelance jobs
+class FreelanceJob(ABC):
+    def __init__(self, client_name, job_title):
+        self.client_name = client_name
+        self.job_title = job_title     
+
+    @abstractmethod
+    def calculate_earnings(self):
+        pass
+
+    def describe_job(self):
+        return f"Job Title: {self.job_title}, Client: {self.client_name}"
+
+
+class CopywritingJob(FreelanceJob):
+    def __init__(self, client_name, job_title, rate_per_word, word_count):
+        super().__init__(client_name, job_title)
+        self.rate_per_word = rate_per_word  
+        self.word_count = word_count        
+
+    def calculate_earnings(self):
+        """Calculate earnings for copywriting based on word count."""
+        return self.rate_per_word * self.word_count
+
+
+class ConsultationJob(FreelanceJob):
+    def __init__(self, client_name, job_title, hourly_rate, hours_worked, bonus_amount):
+        super().__init__(client_name, job_title)
+        self.hourly_rate = hourly_rate      
+        self.hours_worked = hours_worked    
+        self.bonus_amount = bonus_amount   
+
+    def calculate_earnings(self):
+        """Calculate earnings for consultation jobs with possible bonus."""
+        earnings = self.hourly_rate * self.hours_worked
+        if self.hours_worked > self.bonus_amount:
+            earnings  
+        return earnings
+
+
+class PhotographyJob(FreelanceJob):
+    def __init__(self, client_name, job_title, rate_per_photo, photos_taken, bonus_amount):
+        super().__init__(client_name, job_title)
+        self.rate_per_photo = rate_per_photo  
+        self.photos_taken = photos_taken   
+        self.bonus_amount = bonus_amount     
+
+    def calculate_earnings(self):
+        """Calculate earnings for photography based on photos taken."""
+        earnings = self.rate_per_photo * self.photos_taken
+        if self.photos_taken > self.bonus_amount:
+            earnings
+        return earnings
+
+def generate_invoice(job_list):
+    """Generates and prints the invoice for a list of FreelanceJob objects."""
+    print("---- Freelance Job Invoice ----")
+    for job in job_list:
+        print(f"\n{job.describe_job()}")
+        print(f"Earnings: ${job.calculate_earnings():.2f}")  
+
+if __name__ == "__main__":
+    copywriting_job = CopywritingJob("Client A", "Blog Post", 0.10, 500)  # 0.10 per word for 500 words or more
+    consultation_job = ConsultationJob("Client B", "Business Consultation", 100, 25, 250)  # 100/hr for 25 hours with a $250 bonus
+    photography_job = PhotographyJob("Client C", "Wedding Photography", 50, 250, 500)  # 50/photo for 250 photos with a $500 bonus if more than 200 photos
+
+    jobs = [copywriting_job, consultation_job, photography_job]
+
+    generate_invoice(jobs)
